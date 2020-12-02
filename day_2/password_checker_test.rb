@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative  "../password_checker"
+require_relative "password_checker"
 
 class PasswordCheckerTest < Minitest::Test
   def test_when_range_policy
