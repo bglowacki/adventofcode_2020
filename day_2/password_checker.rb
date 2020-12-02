@@ -8,8 +8,8 @@ class PasswordChecker
 
   def valid?(policy_password_string)
     policy, password = policy_password_string.split(": ")
-    range_policy = @policy.new(policy_string: policy)
-    range_policy.valid?(password: password)
+    policy = @policy.new(policy_string: policy)
+    policy.valid?(password: password)
   end
 
   def count_correct_passwords(input:)
@@ -17,8 +17,8 @@ class PasswordChecker
   end
 end
 
-checker = PasswordChecker.new(policy: RangePolicy)
-pp checker.count_correct_passwords(input: File.readlines("password_input.txt"))
-
-checker = PasswordChecker.new(policy: PositionPolicy)
-pp checker.count_correct_passwords(input: File.readlines("password_input.txt"))
+# checker = PasswordChecker.new(policy: RangePolicy)
+# pp checker.count_correct_passwords(input: File.readlines("password_input.txt"))
+#
+# checker = PasswordChecker.new(policy: PositionPolicy)
+# pp checker.count_correct_passwords(input: File.readlines("password_input.txt"))
