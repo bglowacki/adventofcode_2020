@@ -1,48 +1,5 @@
-class RangePolicy
-  attr_reader :required_char, :min, :max
-
-  def initialize(policy_string:)
-    min_max, @required_char = policy_string.split(" ")
-    @min, @max = min_max.split("-").map(&:to_i)
-  end
-
-  def valid?(password:)
-    password.
-      split("").
-      select { |char| char == required_char }.
-      size.
-      between?(min, max)
-  end
-end
-
-class PositionPolicy
-  def initialize(policy_string:)
-    indexes, @required_char = policy_string.split(" ")
-    @first_index, @second_index = indexes.split("-").map(&:to_i)
-  end
-
-  def valid?(password:)
-    only_first_position_contains_char?(password) || only_second_position_contains_char?(password)
-  end
-
-  private
-
-  def only_first_position_contains_char?(password)
-    first_position_contains_char?(password) && !second_position_contains_char?(password)
-  end
-
-  def only_second_position_contains_char?(password)
-    !first_position_contains_char?(password) && second_position_contains_char?(password)
-  end
-
-  def first_position_contains_char?(password)
-    password[@first_index - 1] == @required_char
-  end
-
-  def second_position_contains_char?(password)
-    password[@second_index - 1] == @required_char
-  end
-end
+require_relative "position_policy"
+require_relative "range_policy"
 
 class PasswordChecker
   def initialize(policy:)
