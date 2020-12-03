@@ -1,3 +1,26 @@
+class CurrentPosition
+  attr_reader :row, :column
+
+  def initialize(row, column)
+    @row = row
+    @column = column
+  end
+
+  def move_right(steps, map_size)
+    steps.times.each do
+      @row += 1
+      @row = 0 if @row == map_size
+    end
+  end
+
+  def move_down(steps)
+    steps.times.each do
+      @column += 1
+    end
+  end
+end
+
+
 class PathFinder
   attr_reader :map
 
@@ -7,30 +30,15 @@ class PathFinder
   end
 
   def number_of_collisions(slope)
-    current_position = [0, 0]
+    current_position = CurrentPosition.new(0, 0)
     number_of_trees = 0
     map.each do
-      number_of_trees += 1 if map[current_position[0]][current_position[1]] == "#"
-      move_down(current_position, slope[0])
-      move_right(current_position, slope[1])
-      break if current_position[0] > map.size
+      number_of_trees += 1 if map[current_position.column][current_position.row] == "#"
+      current_position.move_down(slope[0])
+      current_position.move_right(slope[1], map[0].size)
+      break if current_position.column > map.size
     end
     number_of_trees
-  end
-
-  private
-
-  def move_down(current_position, steps)
-    steps.times.each do
-      current_position[0] += 1
-    end
-  end
-
-  def move_right(current_position, steps)
-    steps.times.each do
-      current_position[1] += 1
-      current_position[1] = 0 if current_position[1] == map[0].size
-    end
   end
 end
 
