@@ -94,7 +94,7 @@ class PathFinder
     @map = Map.new(raw_map)
   end
 
-  def number_of_collisions(slope)
+  def find_number_of_tree_collisions(slope)
     current_position = CurrentPosition.new(0, 0)
     tree_counter = TreeCounter.new
 
@@ -117,6 +117,7 @@ end
 #
 # @path_finder = PathFinder.new(File.read("input.txt"))
 # collisions = slopes.map do |slope|
-#   @path_finder.number_of_collisions(slope)
+#   @path_finder.find_number_of_tree_collisions(slope)
 # end
 # pp collisions.inject(:*)
+#
