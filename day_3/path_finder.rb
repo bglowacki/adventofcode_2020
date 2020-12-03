@@ -6,48 +6,113 @@ class CurrentPosition
     @column = column
   end
 
-  def move_right(steps, map_size)
+  def change(slope, map)
+    move_right(slope.right, map)
+    move_down(slope.down)
+  end
+
+  private
+
+  def move_right(steps, map)
     steps.times.each do
-      @row += 1
-      @row = 0 if @row == map_size
+      step_right
+      move_to_left_edge if map.edge?(self)
     end
   end
 
   def move_down(steps)
     steps.times.each do
-      @column += 1
+      step_down
     end
+  end
+
+  def step_down
+    @row += 1
+  end
+
+  def step_right
+    @column += 1
+  end
+
+  def move_to_left_edge
+    @column = 0
   end
 end
 
+class Map
+  def initialize(input)
+    rows = input.split("\n")
+    @grid = rows.map { |row| row.split("") }
+  end
+
+  def number_of_rows
+    @grid.size
+  end
+
+  def number_of_columns
+    @grid[0].size
+  end
+
+  def tree?(current_position)
+    @grid[current_position.row][current_position.column] == "#"
+  end
+
+  def edge?(position)
+    number_of_columns == position.column
+  end
+
+  def bottom?(position)
+    position.row >= number_of_rows
+  end
+end
+
+class Slope
+  attr_reader :down, :right
+
+  def initialize(raw_slope)
+    @down = raw_slope[0]
+    @right = raw_slope[1]
+  end
+end
+
+class TreeCounter
+  attr_reader :count
+
+  def initialize
+    @count = 0
+  end
+
+  def add
+    @count += 1
+  end
+end
 
 class PathFinder
   attr_reader :map
 
-  def initialize(map)
-    rows = map.split("\n")
-    @map = rows.map { |row| row.split("") }
+  def initialize(raw_map)
+    @map = Map.new(raw_map)
   end
 
   def number_of_collisions(slope)
     current_position = CurrentPosition.new(0, 0)
-    number_of_trees = 0
-    map.each do
-      number_of_trees += 1 if map[current_position.column][current_position.row] == "#"
-      current_position.move_down(slope[0])
-      current_position.move_right(slope[1], map[0].size)
-      break if current_position.column > map.size
+    tree_counter = TreeCounter.new
+
+    until map.bottom?(current_position) do
+      tree_counter.add if map.tree?(current_position)
+      current_position.change(slope, map)
     end
-    number_of_trees
+
+    tree_counter.count
   end
 end
 
 # slopes = [
-#   [1,3],
-#   [1,1],
-#   [1,5],
-#   [1,7],
-#   [2,1]
+#   Slope.new([1,3]),
+#   Slope.new([1,1]),
+#   Slope.new([1,5]),
+#   Slope.new([1,7]),
+#   Slope.new([2,1])
 # ]
 #
 # @path_finder = PathFinder.new(File.read("input.txt"))
