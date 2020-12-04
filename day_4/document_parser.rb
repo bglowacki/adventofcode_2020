@@ -21,13 +21,9 @@ class DocumentParser
   def build_fields(raw_document)
     document_fields = raw_document.split(" ").map { |document_fields| document_fields.split(":") }
     document_fields.map do |key, value|
-      field_type = find_field_by_key(key)
+      field_type = Document.get_field_type_by_key(key)
       field_type.new(name: key, value: value)
     end
-  end
-
-  def find_field_by_key(key)
-    Document::POSSIBLE_DOCUMENT_FIELDS.find { |type| type.symbol == key } || GenericField
   end
 
   def parse_raw_documents

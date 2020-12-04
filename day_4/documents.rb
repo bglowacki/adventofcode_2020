@@ -1,15 +1,14 @@
 class Document
   PASSPORT_FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
   NORTH_POLE_CREDENTIAL_FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
-  POSSIBLE_DOCUMENT_FIELDS = [
+  NON_GENERIC_DOCUMENT_FIELDS = [
     BirthYear,
     IssueYear,
     ExpirationYear,
     Height,
     HairColor,
     EyeColor,
-    PassportId,
-    GenericField
+    PassportId
   ]
 
   def self.passport?(field_names)
@@ -33,6 +32,10 @@ class Document
 
   def valid?
     false
+  end
+
+  def self.get_field_type_by_key(key)
+    NON_GENERIC_DOCUMENT_FIELDS.find { |type| type.symbol == key } || GenericField
   end
 end
 
