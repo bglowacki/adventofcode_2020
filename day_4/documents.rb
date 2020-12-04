@@ -11,12 +11,8 @@ class Document
     PassportId
   ]
 
-  def self.passport?(field_names)
-    field_names.sort == PASSPORT_FIELDS.sort
-  end
-
-  def self.north_pole_credential?(field_names)
-    field_names.sort == NORTH_POLE_CREDENTIAL_FIELDS.sort
+  def self.get_field_type_by_key(key)
+    NON_GENERIC_DOCUMENT_FIELDS.find { |type| type.symbol == key } || GenericField
   end
 
   def self.from_fields(document_fields)
@@ -34,8 +30,14 @@ class Document
     false
   end
 
-  def self.get_field_type_by_key(key)
-    NON_GENERIC_DOCUMENT_FIELDS.find { |type| type.symbol == key } || GenericField
+  private
+
+  def self.passport?(field_names)
+    field_names.sort == PASSPORT_FIELDS.sort
+  end
+
+  def self.north_pole_credential?(field_names)
+    field_names.sort == NORTH_POLE_CREDENTIAL_FIELDS.sort
   end
 end
 
