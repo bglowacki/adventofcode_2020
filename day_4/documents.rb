@@ -12,7 +12,7 @@ class Document
     GenericField
   ]
 
-  def self.password?(field_names)
+  def self.passport?(field_names)
     field_names.sort == PASSPORT_FIELDS.sort
   end
 
@@ -22,7 +22,7 @@ class Document
 
   def self.from_fields(document_fields)
     field_names = document_fields.map(&:name)
-    return Passport.new(fields: document_fields) if password?(field_names)
+    return Passport.new(fields: document_fields) if passport?(field_names)
     return NorthPoleCredentials.new(fields: document_fields) if north_pole_credential?(field_names)
     self.new(fields: document_fields)
   end
