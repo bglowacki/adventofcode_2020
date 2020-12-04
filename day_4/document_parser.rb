@@ -10,7 +10,7 @@ class DocumentParser
   end
 
   def parse
-    extract_documents.map do |raw_document|
+    parse_raw_documents.map do |raw_document|
       document_fields = build_fields(raw_document)
       Document.from_fields(document_fields)
     end
@@ -30,7 +30,7 @@ class DocumentParser
     Document::POSSIBLE_DOCUMENT_FIELDS.find { |type| type.symbol == key } || GenericField
   end
 
-  def extract_documents
+  def parse_raw_documents
     raw_documents.split("\n\n").map { |passport| passport.gsub("\n", " ") }
   end
 end
