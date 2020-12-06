@@ -1,7 +1,7 @@
 class SeatFinder
   def initialize
-    @all_rows = (0..127).to_a
-    @all_columns = (0..7).to_a
+    @all_rows = (0 .. 127).to_a
+    @all_columns = (0 .. 7).to_a
     @current_row_section = @all_rows
     @current_column_section = @all_columns
   end
@@ -34,7 +34,7 @@ ids = File.readlines("input.txt").map do |code|
 end.sort
 
 ids.sort.each_with_index do |id, index|
-  if id - 1  != ids[index - 1]
-    pp id
+  if index > 0 && id - 1 != ids[index - 1]
+    pp id - 1
   end
 end
